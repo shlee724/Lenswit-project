@@ -4,6 +4,9 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <!-- 카메라 하드웨어 기능을 명시 (필수 아님) -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!--파일 읽기, 쓰기 권한-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:label="lenswit_demo"

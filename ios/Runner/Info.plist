@@ -7,6 +7,8 @@
         <!-- 카메라 권한 설명 추가 -->
         <key>NSCameraUsageDescription</key>
         <string>앱이 카메라를 사용하여 사진을 찍고, 동영상을 녹화합니다.</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>사진을 저장하거나 불러오기 위해 사진 라이브러리에 접근합니다.</string>
 
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>

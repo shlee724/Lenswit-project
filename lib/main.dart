@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +24,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  File? _image;  // 찍은 사진을 저장할 변수
+  final ImagePicker _picker = ImagePicker();  // ImagePicker 인스턴스 생성
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +44,16 @@ class _MainPageState extends State<MainPage> {
     } else if (status.isPermanentlyDenied) {
       print("카메라 권한이 영구적으로 거부되었습니다. 설정에서 권한을 변경해야 합니다.");
       openAppSettings(); // 설정 페이지로 이동하여 권한 변경
+    }
+  }
+
+  // 카메라 열어서 사진 찍기
+  Future<void> _takePicture() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);  // 카메라를 열어서 사진 찍기
+    if (photo != null) {
+      setState(() {
+        _image = File(photo.path);  // 찍은 사진을 저장
+      });
     }
   }
 
@@ -60,13 +75,19 @@ class _MainPageState extends State<MainPage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 50), // 하단에서 약간의 여백
               child: ElevatedButton(
-                onPressed: () {
-                  print("버튼 클릭됨");
-                },
-                child: Text('시작합니다'),
+                onPressed: _takePicture, // 버튼 클릭 시 카메라 실행
+                child: Text('시작합니다'), // 버튼 텍스트
               ),
             ),
           ),
+          // 찍은 사진 표시
+          if (_image != null)
+            Positioned(
+              top: 100,
+              left: 50,
+              right: 50,
+              child: Image.file(_image!),  // 찍은 사진을 화면에 표시
+            ),
         ],
       ),
     );

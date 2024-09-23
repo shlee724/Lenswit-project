@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.4.1
   permission_handler: ^10.2.0
+  image_picker: ^0.8.7+3  # 이미지 선택 패키지
 
 dev_dependencies:
   flutter_test:
