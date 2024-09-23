@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+
+
+        <!-- 카메라 권한 설명 추가 -->
+        <key>NSCameraUsageDescription</key>
+        <string>앱이 카메라를 사용하여 사진을 찍고, 동영상을 녹화합니다.</string>
+
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>

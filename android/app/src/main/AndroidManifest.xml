@@ -1,8 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 카메라 권한 추가 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- 카메라 하드웨어 기능을 명시 (필수 아님) -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
     <application
         android:label="lenswit_demo"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
