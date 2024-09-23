@@ -29,14 +29,16 @@ class MainPage extends StatelessWidget {
             ),
           ),
           // 이미지 위에 버튼
-          Positioned(
-            bottom: 50, // 버튼의 위치를 이미지 위에 설정
-            left: 50,   // 버튼의 위치 설정
-            child: ElevatedButton(
-              onPressed: () {
-                print("버튼 클릭됨");
-              },
-              child: Text('시작하기'),
+          Align(
+            alignment: Alignment.bottomCenter, // 하단 중앙 정렬
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 50), // 하단에서 약간의 여백
+              child: ElevatedButton(
+                onPressed: () {
+                  print("버튼 클릭됨");
+                },
+                child: Text('이미지 위의 버튼'),
+              ),
             ),
           ),
         ],
