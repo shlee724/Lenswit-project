@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,12 +16,37 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  @override
+  void initState() {
+    super.initState();
+    _requestCameraPermission(); // 앱 시작 시 권한 요청
+  }
+
+  // 카메라 권한 요청 함수
+  Future<void> _requestCameraPermission() async {
+    PermissionStatus status = await Permission.camera.request();
+
+    if (status.isGranted) {
+      print("카메라 권한이 허용되었습니다.");
+    } else if (status.isDenied) {
+      print("카메라 권한이 거부되었습니다.");
+    } else if (status.isPermanentlyDenied) {
+      print("카메라 권한이 영구적으로 거부되었습니다. 설정에서 권한을 변경해야 합니다.");
+      openAppSettings(); // 설정 페이지로 이동하여 권한 변경
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-          children: <Widget>[
+        children: <Widget>[
           // 배경 이미지
           Positioned.fill(
             child: Image.asset(
@@ -37,7 +63,7 @@ class MainPage extends StatelessWidget {
                 onPressed: () {
                   print("버튼 클릭됨");
                 },
-                child: Text('이미지 위의 버튼'),
+                child: Text('시작합니다'),
               ),
             ),
           ),
@@ -46,4 +72,3 @@ class MainPage extends StatelessWidget {
     );
   }
 }
-
