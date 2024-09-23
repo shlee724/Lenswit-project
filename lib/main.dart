@@ -10,8 +10,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Container(
-      )
+      home: MainPage(),
+    );
+  }
+}
+
+class MainPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Image.asset('assets/images/main_page.png', fit: BoxFit.cover,),  // 이미지 표시
+      ),
     );
   }
 }
