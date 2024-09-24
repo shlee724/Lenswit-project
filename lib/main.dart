@@ -57,39 +57,76 @@ class _MainPageState extends State<MainPage> {
       setState(() {
         _image = File(photo.path);  // 찍은 사진을 저장
       });
-      await _uploadImageAndAnalyze(_image!); // 사진을 찍고 분석 요청
+      await _analyzeImage(); // 사진을 찍고 분석 요청
     }
   }
 
-  // OpenAI API로 사진을 보내고 분석 결과 받기
-  Future<void> _uploadImageAndAnalyze(File imageFile) async {
+  Future<String> analyzeImage(String base64Image) async {
 
-    // 파일을 multipart 형식으로 전송
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('https://api.openai.com/v1/chat/completions'), // OpenAI API 이미지 엔드포인트
+    final apiUrl = 'https://api.openai.com/v1/chat/completions';
+    print("base64Image:" + base64Image);
+
+    var response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiKey'
+      },
+      body: json.encode({
+        'model': 'gpt-4o-mini',
+        'messages': [
+          {
+            'role': 'user',
+            'content': [
+              {'type': 'text',
+               'text': '이 이미지를 분석해주세요.'
+              },
+              {
+                'type': 'image_url',
+                'image_url': {
+                  'url': 'data:image/jpeg;base64,$base64Image'}
+              }
+            ]
+          }
+        ],
+        'max_tokens': 1000
+      }),
     );
+    final responseMap = {
+      'Status Code': response.statusCode,
+      'Body': response.body,
+      'Body Bytes': response.bodyBytes,
+      'Headers': response.headers,
+      'Content Length': response.contentLength,
+      'Reason Phrase': response.reasonPhrase,
+      'Request': response.request.toString(),
+      'Persistent Connection': response.persistentConnection,
+      'Is Redirect': response.isRedirect
+    };
 
-    // 요청 헤더에 API 키 추가
-    request.headers['Authorization'] = 'Bearer $apiKey';
-    request.headers['Content-Type'] = 'multipart/form-data';
-
-    // 파일 추가
-    request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
-
-    // 요청 보내기
-    var response = await request.send();
-
-    // 응답 처리
+    print(responseMap);
     if (response.statusCode == 200) {
-      var responseData = await http.Response.fromStream(response);
-      var decodedData = jsonDecode(responseData.body);
-      setState(() {
-        _analysisResult = decodedData.toString(); // 분석 결과를 저장
-      });
+      final data = jsonDecode(response.body);
+      return data['choices'][0]['message']['content'];
     } else {
+      throw Exception('Failed to analyze image: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _analyzeImage() async {
+    if (_image == null) return;
+
+    final bytes = await _image!.readAsBytes();
+    final base64Image = base64Encode(bytes);
+
+    try {
+      final result = await analyzeImage(base64Image);
       setState(() {
-        _analysisResult = '분석 실패: ${response.statusCode}';
+        _analysisResult = result;
+      });
+    } catch (e) {
+      setState(() {
+        _analysisResult = 'Error: $e';
       });
     }
   }
