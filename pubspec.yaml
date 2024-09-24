@@ -38,6 +38,7 @@ dependencies:
   flutter_native_splash: ^2.4.1
   permission_handler: ^10.2.0
   image_picker: ^0.8.7+3  # 이미지 선택 패키지
+  http: ^0.13.3  # HTTP 패키지 추가
 
 dev_dependencies:
   flutter_test:

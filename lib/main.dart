@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -26,6 +28,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   File? _image;  // 찍은 사진을 저장할 변수
   final ImagePicker _picker = ImagePicker();  // ImagePicker 인스턴스 생성
+  String? _analysisResult; // 분석 결과를 저장할 변수
 
   @override
   void initState() {
@@ -53,6 +56,40 @@ class _MainPageState extends State<MainPage> {
     if (photo != null) {
       setState(() {
         _image = File(photo.path);  // 찍은 사진을 저장
+      });
+      await _uploadImageAndAnalyze(_image!); // 사진을 찍고 분석 요청
+    }
+  }
+
+  // OpenAI API로 사진을 보내고 분석 결과 받기
+  Future<void> _uploadImageAndAnalyze(File imageFile) async {
+
+    // 파일을 multipart 형식으로 전송
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('https://api.openai.com/v1/chat/completions'), // OpenAI API 이미지 엔드포인트
+    );
+
+    // 요청 헤더에 API 키 추가
+    request.headers['Authorization'] = 'Bearer $apiKey';
+    request.headers['Content-Type'] = 'multipart/form-data';
+
+    // 파일 추가
+    request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+
+    // 요청 보내기
+    var response = await request.send();
+
+    // 응답 처리
+    if (response.statusCode == 200) {
+      var responseData = await http.Response.fromStream(response);
+      var decodedData = jsonDecode(responseData.body);
+      setState(() {
+        _analysisResult = decodedData.toString(); // 분석 결과를 저장
+      });
+    } else {
+      setState(() {
+        _analysisResult = '분석 실패: ${response.statusCode}';
       });
     }
   }
@@ -86,7 +123,7 @@ class _MainPageState extends State<MainPage> {
               top: 100,
               left: 50,
               right: 50,
-              child: Image.file(_image!),  // 찍은 사진을 화면에 표시
+              child: Text('분석 결과: $_analysisResult'),
             ),
         ],
       ),
