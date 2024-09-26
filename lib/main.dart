@@ -92,6 +92,9 @@ class _MainPageState extends State<MainPage> {
         'max_tokens': 1000
       }),
     );
+    // 응답을 UTF-8로 디코딩하여 처리
+    final decodedBody = utf8.decode(response.bodyBytes);
+
     final responseMap = {
       'Status Code': response.statusCode,
       'Body': response.body,
@@ -106,7 +109,7 @@ class _MainPageState extends State<MainPage> {
 
     print(responseMap);
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      final data = jsonDecode(decodedBody);
       return data['choices'][0]['message']['content'];
     } else {
       throw Exception('Failed to analyze image: ${response.statusCode}');
