@@ -4,8 +4,10 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async{
+  await dotenv.load(fileName: ".env");    // 2번코드
   runApp(const MyApp());
 }
 
@@ -63,7 +65,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<String> analyzeImage(String base64Image) async {
-
+    final apiKey = dotenv.env['OPENAI_API_KEY']; // OpenAI API 키 입력
     final apiUrl = 'https://api.openai.com/v1/chat/completions';
     print("base64Image:" + base64Image);
 
