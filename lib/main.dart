@@ -73,13 +73,14 @@ class _MainPageState extends State<MainPage> {
         'Authorization': 'Bearer $apiKey'
       },
       body: json.encode({
-        'model': 'gpt-4o-mini',
+        'model': 'gpt-4o',
         'messages': [
           {
             'role': 'user',
             'content': [
               {'type': 'text',
-               'text': '이 이미지를 분석해주세요.'
+               'text': '이 콘택트 렌즈가 뒤집혔는지 정상인지 알려줘. 정상일 가능성이 더 높다면'
+                   '"정상입니다!" 라고 말하고, 뒤집혔을 가능성이 더 높다면 "뒤집혔습니다" 라고 말해'
               },
               {
                 'type': 'image_url',
