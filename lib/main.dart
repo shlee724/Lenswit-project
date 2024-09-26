@@ -52,6 +52,7 @@ class _MainPageState extends State<MainPage> {
 
   // 카메라 열어서 사진 찍기
   Future<void> _takePicture() async {
+    _analysisResult = "분석중...";
     final XFile? photo = await _picker.pickImage(source: ImageSource.camera);  // 카메라를 열어서 사진 찍기
     if (photo != null) {
       setState(() {
@@ -143,7 +144,7 @@ class _MainPageState extends State<MainPage> {
           // 배경 이미지
           Positioned.fill(
             child: Image.asset(
-              'assets/images/main_page.png',
+              'assets/images/main_page.jpg',
               fit: BoxFit.cover, // 이미지가 화면을 채우도록 설정
             ),
           ),
@@ -161,10 +162,17 @@ class _MainPageState extends State<MainPage> {
           // 찍은 사진 표시
           if (_image != null)
             Positioned(
-              top: 100,
+              top: MediaQuery.of(context).size.height * 0.6, // 화면의 정중앙보다 약간 아래로 설정
               left: 50,
               right: 50,
-              child: Text('분석 결과: $_analysisResult'),
+              child: Text(
+                '분석 결과: $_analysisResult',
+                style: TextStyle(
+                  color: Colors.white, // 텍스트 색상을 하얗게 설정
+                  fontSize: 24, // 기존보다 글자 크기를 크게 설정
+                ),
+                textAlign: TextAlign.center, // 텍스트를 중앙 정렬
+              ),
             ),
         ],
       ),
