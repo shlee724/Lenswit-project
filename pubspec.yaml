@@ -51,7 +51,16 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.1
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon.png"  # 아이콘 이미지 경로
+  remove_alpha_ios: true  # iOS 아이콘에서 알파 채널 제거
+  adaptive_icon_background: "#ffffff"  # 배경색 또는 이미지 파일 경로 설정
+  adaptive_icon_foreground: "assets/app_icon.png"  # 아이콘 이미지 경로 설정
+  adaptive_icon_round: true # 라운드 아이콘 생성
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
