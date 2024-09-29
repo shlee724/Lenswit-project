@@ -1,4 +1,4 @@
-package com.example.lenswit_demo
+package com.paperman.lenswit_demo
 
 import io.flutter.embedding.android.FlutterActivity
 
